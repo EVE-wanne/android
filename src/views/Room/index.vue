@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <router-view> </router-view>
-  </div>
+  <div>租房页面</div>
 </template>
 
 <script>
