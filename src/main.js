@@ -4,7 +4,8 @@ import router from './router'
 import store from './store'
 //* 导入vant
 import Vant from 'vant'
-import 'vant/lib/index.css'
+// import 'vant/lib/index.css'
+import 'vant/lib/index.less'
 //* 导入移动适配插件
 import 'amfe-flexible'
 Vue.use(Vant)
