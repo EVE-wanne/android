@@ -9,13 +9,16 @@ const vuexLocal = new VuexPersistence({
 
 export default new Vuex.Store({
   state: {
-    user: {}
+    user: null
   },
   getters: {
   },
   mutations: {
     setuser (state, payload) {
       state.user = payload
+    },
+    deluser (state) {
+      state.user = null
     }
   },
   actions: {

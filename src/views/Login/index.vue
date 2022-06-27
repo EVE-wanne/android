@@ -66,7 +66,7 @@ export default {
         try {
           const res = await login(values)
           //* 登录成功后，我们需要将这个返回的token保存到vuex中
-          // console.log(res)
+          console.log(res)
           this.$store.commit('setuser', res.data.body)
           this.$toast.success('登录成功')
           //* 成功后跳转到首页页面
