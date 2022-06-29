@@ -9,7 +9,14 @@ const vuexLocal = new VuexPersistence({
 
 export default new Vuex.Store({
   state: {
-    user: null
+    user: null,
+    currentcity: {
+      label: '北京',
+      pinyin: 'beijing',
+      short: 'bj',
+      value: 'AREA|88cff55c-aaa4-e2e0'
+
+    }
   },
   getters: {
   },
@@ -19,6 +26,9 @@ export default new Vuex.Store({
     },
     deluser (state) {
       state.user = null
+    },
+    setcity (state, payload) {
+      state.currentcity = payload
     }
   },
   actions: {

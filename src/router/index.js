@@ -12,7 +12,7 @@ const routes = [
     redirect: '/home', //* 重定向，页面打开就调到首页
     children: [
       { path: 'home', component: () => import('@/views/Home') },
-      { path: 'room', component: () => import('@/views/Room') },
+      { path: 'room', component: () => import('@/views/Room'), name: 'room' },
       { path: 'consult', component: () => import('@/views/Consult') },
       {
         path: 'my',
@@ -27,7 +27,10 @@ const routes = [
   { path: '/myrecord', component: () => import('@/views/My/components/myrecord.vue') },
   { path: '/homeowner', component: () => import('@/views/My/components/homeowner.vue') },
   { path: '/mydata', component: () => import('@/views/My/components/mydata.vue') },
-  { path: '/contactus', component: () => import('@/views/My/components/contactus.vue') }
+  { path: '/contactus', component: () => import('@/views/My/components/contactus.vue') },
+  { path: '/city', component: () => import('@/views/City') },
+  { path: '/map', component: () => import('@/views/Map'), name: 'map' },
+  { path: '/publish', component: () => import('@/views/Publish'), name: 'publish' }
 
 ]
 

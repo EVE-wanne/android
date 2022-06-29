@@ -2,7 +2,7 @@
   <div>
     <router-view />
     <!-- 这个是共有的路由页面  -->
-    <van-tabbar route active-color="#17b574">
+    <van-tabbar route active-color="#17b574" class="footer">
       <van-tabbar-item replace to="/home" icon="wap-home-o"
         >首页</van-tabbar-item
       >
@@ -30,4 +30,11 @@ export default {
 </script>
 
 <style scoped lang='less'>
+.van-tabbar {
+  z-index: 0;
+}
+.footer {
+  position: fixed;
+  bottom: 0;
+}
 </style>

@@ -96,6 +96,8 @@ export default {
         this.userinfo = data.body
       } catch (err) {
         console.log(err)
+        //* 如果登录失败，直接清除本地的过期token，然后让用户自己选择是登录还是游客访问
+        this.$store.commit('deluser')
       }
     }
   },
