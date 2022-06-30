@@ -10,3 +10,14 @@ export const getuserinfo = () => {
     url: '/user'
   })
 }
+
+/**
+ * @param {} data
+ * 获取用户的出租数据
+ */
+export const getmyhouse = () => {
+  return request({
+    method: 'GET',
+    url: '/user/houses'
+  })
+}

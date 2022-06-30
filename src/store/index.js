@@ -16,7 +16,8 @@ export default new Vuex.Store({
       short: 'bj',
       value: 'AREA|88cff55c-aaa4-e2e0'
 
-    }
+    },
+    houseinfo: { communityName: '请输入小区名字' }
   },
   getters: {
   },
@@ -29,6 +30,9 @@ export default new Vuex.Store({
     },
     setcity (state, payload) {
       state.currentcity = payload
+    },
+    sethousename (state, payload) {
+      state.houseinfo = payload
     }
   },
   actions: {

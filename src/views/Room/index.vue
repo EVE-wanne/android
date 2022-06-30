@@ -126,7 +126,7 @@
             <span v-for="(item, index) in item.tags" :key="index">{{
               item
             }}</span>
-            <p class="price">价格<i>元/月</i></p>
+            <p class="price">{{ item.price }}<i>元/月</i></p>
           </div>
         </template>
       </van-cell>

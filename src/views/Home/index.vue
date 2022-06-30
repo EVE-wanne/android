@@ -51,7 +51,9 @@
         </template>
         <template #text> <span class="txt">地图找房</span> </template>
       </van-grid-item>
-      <van-grid-item @click="$router.push({ name: 'publish' })">
+      <!-- 当登录的时候，我们需要先进行一次登录测试，如果在有uer的情况下，我们直接跳转到发布页面 -->
+      <!-- 如果没有登录，我们需要跳转到登录页面 -->
+      <van-grid-item @click="gotopublish">
         <template #icon>
           <div class="icon-btn"><van-icon name="wap-home-o" /></div>
         </template>
@@ -118,10 +120,19 @@ export default {
       } catch (err) {
         console.log(err)
       }
+    },
+    gotopublish () {
+      if (this.user === null) {
+        this.$router.push({ name: 'login' })
+      } else {
+        this.$router.push({ name: 'publish' })
+        //* 把小区数据再还原
+        this.$store.commit('sethousename', { communityName: '请输入小区名字' })
+      }
     }
   },
   computed: {
-    ...mapState(['currentcity'])
+    ...mapState(['currentcity', 'user'])
   },
   watch: {},
   filters: {},

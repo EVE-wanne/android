@@ -1,5 +1,6 @@
 <template>
   <div>
+    <van-nav-bar title="城市列表" left-arrow @click-left="$router.back()" />
     <van-index-bar :index-list="indexList">
       <!-- 当前选中的城市 -->
       <van-index-anchor index="#">当前城市</van-index-anchor>
