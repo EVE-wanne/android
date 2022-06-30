@@ -31,7 +31,8 @@ const routes = [
   { path: '/city', component: () => import('@/views/City') },
   { path: '/map', component: () => import('@/views/Map'), name: 'map' },
   { path: '/publish', component: () => import('@/views/Publish'), name: 'publish' },
-  { path: '/findfooms', component: () => import('@/views/Publish/findrooms.vue'), name: 'findrooms' }
+  { path: '/findfooms', component: () => import('@/views/Publish/findrooms.vue'), name: 'findrooms' },
+  { path: '/houseinfo', component: () => import('@/views/Houseinfo'), name: 'houseinfo' }
 
 ]
 
