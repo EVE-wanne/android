@@ -183,7 +183,7 @@
         v-for="(item, index) in list"
         :key="index"
         class="roomlist"
-        @click="$router.push({ name: 'houseinfo' })"
+        @click="gotoinfo(item.houseCode)"
       >
         <!-- 左边的内容 -->
         <template #title>
@@ -212,10 +212,13 @@
 // * 导入vuex虚拟模块
 import { mapState } from 'vuex'
 import { getcondition, gethouses } from '@/api/house'
+//* 导入地图请求模块
+import { maphouse } from '@/api/map'
 export default {
   created () {
     this.getlist()
     //* 页面打开的时候我们需要获取数据
+    this.getmaphouse()
   },
   data () {
     return {
@@ -270,10 +273,19 @@ export default {
     },
     async onLoad () {
       try {
+        this.$toast.loading({
+          message: '加载中...',
+          forbidClick: true,
+          duration: 0
+        })
+        this.show = false
         const { data } = await gethouses(this.paramss)
         console.log('加载成功')
         this.list.push(...data.body.list)
         this.loading = false
+        this.$toast.success({
+          message: '加载成功'
+        })
         //* 如果请求的数据为0
         if (data.body.list.length <= 0) {
           this.finished = true
@@ -325,7 +337,7 @@ export default {
           })
         }
       }
-      this.onLoad()
+      this.filtraterooms()
       this.show = false
     },
     onConfirmtwo (value, index) { //* 方式
@@ -336,7 +348,7 @@ export default {
           this.ranttypevalue = item.value
         }
       })
-      this.onLoad()
+      this.filtraterooms()
       this.show = false
     },
     onConfirmthree (value, index) { //* 租金
@@ -350,12 +362,37 @@ export default {
           this.pricevalue = item.value
         }
       })
-      this.onLoad()
+      this.filtraterooms()
       this.show = false
     },
     onCancel () {
       this.show = false
+    },
+    gotoinfo (val) {
+      this.$router.push({
+        name: 'houseinfo'
+      })
+      this.$store.commit('sethousecode', val)
+    },
+    async filtraterooms () {
+      try {
+        const { data } = await gethouses(this.paramss)
+        console.log('加载成功')
+        this.list.unshift(...data.body.list)
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    async getmaphouse () {
+      try {
+        const res = await maphouse(this.currentcity.value)
+        console.log(res)
+        this.$store.commit('setfirstlist', res.data.body)
+      } catch (err) {
+        console.log(err)
+      }
     }
+
   },
   computed: {
     ...mapState(['currentcity']),
@@ -526,7 +563,7 @@ export default {
   display: flex;
   width: 100%;
   height: 50px;
-  position: fixed;
+  position: sticky;
   bottom: 0;
   .left-btn {
     flex: 1;

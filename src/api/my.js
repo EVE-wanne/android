@@ -21,3 +21,14 @@ export const getmyhouse = () => {
     url: '/user/houses'
   })
 }
+
+/**
+ * @param {} data
+ * 我的收藏
+ */
+export const mylove = () => {
+  return request({
+    method: 'GET',
+    url: '/user/favorites'
+  })
+}

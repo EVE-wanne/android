@@ -1,6 +1,6 @@
 <template>
   <div>
-    <van-nav-bar title="房屋管理" left-arrow @click-left="$router.back()" />
+    <van-nav-bar title="我的出租" left-arrow @click-left="$router.back()" />
 
     <van-cell v-for="(item, index) in list" :key="index" class="roomlist">
       <!-- 左边的内容 -->

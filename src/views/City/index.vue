@@ -11,7 +11,7 @@
         :title="item.label"
         v-for="item in hotcity"
         :key="item.pinyin"
-        @click="$store.commit('setcity', item)"
+        @click="change(item)"
       />
       <!-- 字母排序的城市 -->
       <div v-for="(items, index) in allname" :key="index">
@@ -20,7 +20,7 @@
           :title="item.label"
           v-for="(item, index) in mycity[items]"
           :key="index"
-          @click="$store.commit('setcity', item)"
+          @click="change(item)"
         />
       </div>
     </van-index-bar>
@@ -84,6 +84,10 @@ export default {
       } catch (err) {
         console.log(err)
       }
+    },
+    change (item) {
+      this.$store.commit('setcity', item)
+      this.$router.push({ name: 'room' })
     }
 
   },

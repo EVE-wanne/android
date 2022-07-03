@@ -90,11 +90,12 @@
 <script>
 import { getpic, getgroups } from '@/api/home.js'
 import { mapState } from 'vuex'
-
+import { getuserinfo } from '@/api/my'
 export default {
   created () {
     this.getimg()
     this.getgroup()
+    this.ceshi()
   },
   data () {
     return {
@@ -129,7 +130,17 @@ export default {
         //* 把小区数据再还原
         this.$store.commit('sethousename', { communityName: '请输入小区名字' })
       }
+    },
+    async ceshi () {
+      try {
+        await getuserinfo()
+      } catch (err) {
+        console.log(err)
+        //* 如果登录失败，直接清除本地的过期token，然后让用户自己选择是登录还是游客访问
+        this.$store.commit('deluser')
+      }
     }
+
   },
   computed: {
     ...mapState(['currentcity', 'user'])

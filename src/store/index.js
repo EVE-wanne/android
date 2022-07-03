@@ -17,7 +17,9 @@ export default new Vuex.Store({
       value: 'AREA|88cff55c-aaa4-e2e0'
 
     },
-    houseinfo: { communityName: '请输入小区名字' }
+    houseinfo: { communityName: '请输入小区名字' },
+    housecode: null,
+    firstlist: []
   },
   getters: {
   },
@@ -33,6 +35,12 @@ export default new Vuex.Store({
     },
     sethousename (state, payload) {
       state.houseinfo = payload
+    },
+    sethousecode (state, payload) {
+      state.housecode = payload
+    },
+    setfirstlist (state, payload) {
+      state.firstlist = payload
     }
   },
   actions: {
