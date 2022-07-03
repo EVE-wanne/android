@@ -57,7 +57,8 @@
     </div>
 
     <!-- 房屋的定位 -->
-    <div class="map">地图，我不会暂时不写</div>
+    <p class="titles">小区：</p>
+    <div id="map"></div>
     <!-- 房屋的定位 -->
 
     <!-- 房屋配套 -->
@@ -146,9 +147,7 @@ export default {
   },
   data () {
     return {
-      images: [
-
-      ],
+      images: [],
       result: [],
       arr: [{ houseImg: '/uploads/upload_655c51a7fbbf25368953629a60a72099.png', title: '1', tags: ['近地铁'], price: 1111, desc: '一室/10/东/北营房西里', houseCode: '84dac804-5318-46c9' }, { houseImg: '/uploads/upload_78ce07c03f7f2c1ab6f26f0477253c4f.jpeg', title: '整租 一栋 201', tags: ['近地铁'], price: 1500, desc: '三室/120/北/新华联家园南区', houseCode: '8165763f-bed6-2d21' }, { houseImg: '/newImg/img1', title: '整租 · 豪华小区 精装修出租 小区环境幽静', tags: ['近地铁'], price: 1234, desc: '四室/123/北/亮马水晶', houseCode: '455eb041-1eb8-574c' }],
       isshow: false
@@ -157,10 +156,18 @@ export default {
   methods: {
     async getthishouseinfo () {
       try {
+        this.$toast.loading({
+          message: '加载中...',
+          forbidClick: true,
+          duration: 0
+        })
         const { data } = await gethouseinfo(this.housecode)
         this.result = data.body
         this.result.houseImg.forEach(item => {
           this.images.push(`http://liufusong.top:8080${item}`)
+        })
+        this.$toast.success({
+          message: '加载成功'
         })
       } catch (err) {
         console.log(err)
@@ -185,7 +192,53 @@ export default {
   },
   watch: {},
   filters: {},
-  components: {}
+  components: {},
+  async mounted () {
+    try {
+      this.$toast.loading({
+        message: '加载中...',
+        forbidClick: true,
+        duration: 0
+      })
+      const { data } = await gethouseinfo(this.housecode)
+      this.result = data.body
+      this.result.houseImg.forEach(item => {
+        this.images.push(`http://liufusong.top:8080${item}`)
+      })
+      this.$toast.success({
+        message: '加载成功'
+      })
+      //* 加载成功后再进行数据刷新
+      const { BMapGL } = window
+      // 创建地图实例
+      const map = new BMapGL.Map('map')
+
+      // 初始化地图，设置中心点坐标和地图级别
+      map.centerAndZoom(new BMapGL.Point(this.result.coord.longitude, this.result.coord.latitude), 18)// 初始化地图,设置中心点坐标和地图级别
+
+      const opts = {
+        position: new BMapGL.Point(this.result.coord.longitude, this.result.coord.latitude), // 指定文本标注所在的地理位置
+        offset: new BMapGL.Size(-30, -30) // 设置文本偏移量
+      }
+      // 创建文本标注对象
+      const label = new BMapGL.Label(this.result.community, opts)
+      // 自定义文本标注样式
+      label.setStyle({
+        height: '26px',
+        width: '70px',
+        color: '#fff',
+        borderRadius: '5px',
+        backgroundColor: '#ee5d5b',
+        borderColor: '#ee5d5b',
+        fontSize: '16px',
+        lineHeight: '30px',
+        fontFamily: '微软雅黑'
+      })
+      map.addOverlay(label)
+    } catch (err) {
+      console.log(err)
+    }
+  }
 }
 </script>
 
@@ -371,5 +424,9 @@ export default {
 }
 .active {
   color: red;
+}
+#map {
+  width: 100%;
+  height: 145px;
 }
 </style>
