@@ -93,6 +93,10 @@ export default {
     async getuserinfo () {
       try {
         const { data } = await getuserinfo()
+        // console.log(data)
+        if (data.status === 400) {
+          this.$store.commit('deluser')
+        }
         this.userinfo = data.body
       } catch (err) {
         console.log(err)

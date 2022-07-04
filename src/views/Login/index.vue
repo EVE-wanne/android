@@ -64,13 +64,21 @@ export default {
         await this.$refs.form.validate(['username', 'password'])
         // console.log(values)
         try {
+          this.$toast.loading({
+            message: '登录中...',
+            forbidClick: true,
+            duration: 0
+          })
           const res = await login(values)
           //* 登录成功后，我们需要将这个返回的token保存到vuex中
           console.log(res)
           this.$store.commit('setuser', res.data.body)
           this.$toast.success('登录成功')
+          this.$toast.success({
+            message: '登录成功'
+          })
           //* 成功后跳转到首页页面
-          this.$router.push('/home')
+          this.$router.back()
         } catch (err) {
           this.$toast.fail('登录失败')
         }

@@ -33,8 +33,8 @@ import { getcity, gethotcity } from '@/api/city'
 import { mapState } from 'vuex'
 export default {
   created () {
+    // this.gethotcityfn()
     this.getcityfn()
-    this.gethotcityfn()
   },
   data () {
     return {
@@ -48,6 +48,23 @@ export default {
   methods: {
     async getcityfn () {
       try {
+        this.$toast.loading({
+          message: '加载中...',
+          forbidClick: true,
+          duration: 0
+        })
+        const res = await gethotcity()
+        // console.log(res)
+        this.hotcity = res.data.body
+      } catch (err) {
+        console.log(err)
+      }
+      try {
+        /* this.$toast.loading({
+          message: '加载中...',
+          forbidClick: true,
+          duration: 0
+        }) */
         const res = await getcity('1')
         this.allcity = res.data.body
         // 我们遍历整个数组
@@ -72,22 +89,33 @@ export default {
 
         this.indexList.unshift('热')
         this.indexList.unshift('#')
+        this.$toast.success({
+          message: '加载成功'
+        })
       } catch (err) {
         console.log(err)
       }
     },
-    async gethotcityfn () {
+    /* async gethotcityfn () {
       try {
+        this.$toast.loading({
+          message: '加载中...',
+          forbidClick: true,
+          duration: 0
+        })
         const res = await gethotcity()
         // console.log(res)
         this.hotcity = res.data.body
       } catch (err) {
         console.log(err)
       }
-    },
+    }, */
     change (item) {
       this.$store.commit('setcity', item)
       this.$router.push({ name: 'room' })
+    },
+    mounted () {
+
     }
 
   },

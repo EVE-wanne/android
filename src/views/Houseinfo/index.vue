@@ -128,6 +128,7 @@
         icon="star-o"
         @click="add"
         :class="{ active: isshow }"
+        :loading="isloading"
         >收藏</van-button
       >
       <!-- 在线咨询 -->
@@ -139,35 +140,37 @@
 </template>
 
 <script>
-import { gethouseinfo, addrooms } from '@/api/houseinfo'
+import { gethouseinfo, addrooms, decide, delrooms } from '@/api/houseinfo'
 import { mapState } from 'vuex'
 export default {
   created () {
     this.getthishouseinfo()
+    this.getdecide() //* 获得是否收藏的数据
   },
   data () {
     return {
       images: [],
       result: [],
       arr: [{ houseImg: '/uploads/upload_655c51a7fbbf25368953629a60a72099.png', title: '1', tags: ['近地铁'], price: 1111, desc: '一室/10/东/北营房西里', houseCode: '84dac804-5318-46c9' }, { houseImg: '/uploads/upload_78ce07c03f7f2c1ab6f26f0477253c4f.jpeg', title: '整租 一栋 201', tags: ['近地铁'], price: 1500, desc: '三室/120/北/新华联家园南区', houseCode: '8165763f-bed6-2d21' }, { houseImg: '/newImg/img1', title: '整租 · 豪华小区 精装修出租 小区环境幽静', tags: ['近地铁'], price: 1234, desc: '四室/123/北/亮马水晶', houseCode: '455eb041-1eb8-574c' }],
-      isshow: false
+      isshow: null,
+      isloading: false
     }
   },
   methods: {
+    async getdecide () {
+      try {
+        const { data } = await decide(this.housecode)
+        this.isshow = data.body.isFavorite
+      } catch (err) {
+        console.log(err)
+      }
+    },
     async getthishouseinfo () {
       try {
-        this.$toast.loading({
-          message: '加载中...',
-          forbidClick: true,
-          duration: 0
-        })
         const { data } = await gethouseinfo(this.housecode)
         this.result = data.body
         this.result.houseImg.forEach(item => {
           this.images.push(`http://liufusong.top:8080${item}`)
-        })
-        this.$toast.success({
-          message: '加载成功'
         })
       } catch (err) {
         console.log(err)
@@ -175,15 +178,39 @@ export default {
     },
     async add () {
       if (this.user) {
-        try {
-          const res = await addrooms(this.housecode)
-          console.log(res)
-          this.isshow = true
-        } catch (err) {
-          console.log(err)
+        //* 判断这个isshow是true吗，如果是，点击的时候是取消
+        if (this.isshow) {
+          try {
+            this.isloading = true
+            const res = await delrooms(this.housecode)
+            console.log(res)
+            this.isshow = false
+            this.isloading = false
+          } catch (err) {
+            console.log(err)
+          }
+        } else { //* 否则是点击收藏
+          try {
+            this.isloading = true
+            const res = await addrooms(this.housecode)
+            console.log(res)
+            this.isshow = true
+            this.isloading = false
+          } catch (err) {
+            console.log(err)
+          }
         }
       } else {
-        this.$router.push({ name: 'login' })
+        this.$dialog.confirm({
+          message: '您还未登录是否去登录'
+        })
+          .then(() => {
+            // on confirm
+            this.$router.push({ name: 'login' })
+          })
+          .catch(() => {
+            // on cancel
+          })
       }
     }
   },
@@ -224,8 +251,8 @@ export default {
       const label = new BMapGL.Label(this.result.community, opts)
       // 自定义文本标注样式
       label.setStyle({
-        height: '26px',
-        width: '70px',
+        // height: '26px',
+        // width: '70px',
         color: '#fff',
         borderRadius: '5px',
         backgroundColor: '#ee5d5b',
@@ -326,6 +353,7 @@ export default {
   position: fixed;
   bottom: 0;
   display: flex;
+  z-index: 222;
   .van-button {
     width: 100%;
     height: 100%;

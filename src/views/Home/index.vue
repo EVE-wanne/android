@@ -133,7 +133,10 @@ export default {
     },
     async ceshi () {
       try {
-        await getuserinfo()
+        const { data } = await getuserinfo()
+        if (data.status === 400) {
+          this.$store.commit('deluser')
+        }
       } catch (err) {
         console.log(err)
         //* 如果登录失败，直接清除本地的过期token，然后让用户自己选择是登录还是游客访问
